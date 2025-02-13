@@ -1,0 +1,57 @@
+{
+  "name": "sovereign-agent-examples",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "dev:chat": "tsx watch src/chat-server.ts",
+    "transfer": "tsx src/transfer.ts",
+    "swap": "tsx src/swap.ts",
+    "prebuild": "rm -rf dist",
+    "build": "tsup src/server.ts --format cjs --dts --clean",
+    "build-chat": "tsup src/chat-server.ts --format cjs --dts --clean && cp ../src/chat/schema.graphql dist/",
+    "start": "node dist/server.js",
+    "bundle": "nexe dist/server.js --build --output bin/sovereign-agent-server",
+    "start-bundle": "./bin/sovereign-agent-server",
+    "start:chat": "node dist/chat-server.js",
+    "clean": "rm -rf dist bin",
+    "completion": "tsx src/completion.ts"
+  },
+  "bin": "dist/server.js",
+  "nexe": {
+    "input": "dist/server.js",
+    "output": "bin/sovereign-agent-server",
+    "target": "linux-x64-20.11.1",
+    "resources": [
+      "dist/**/*",
+      ".env"
+    ],
+    "temp": "build",
+    "flags": [
+      "--enable-source-maps"
+    ],
+    "patches": [
+      "async_hooks"
+    ]
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.2",
+    "@fastify/type-provider-typebox": "^5.1.0",
+    "@sinclair/typebox": "^0.34.14",
+    "fastify": "^5.2.1",
+    "openai": "^4.28.0",
+    "pino-socket": "^7.4.0",
+    "sovereign-agent": "../"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/node": "^20.0.0",
+    "dotenv": "^16.4.7",
+    "jest": "^29.7.0",
+    "nexe": "4.0.0-rc.6",
+    "pino": "^8.19.0",
+    "pino-pretty": "^10.3.1",
+    "tsup": "^8.3.5",
+    "tsx": "^4.7.0",
+    "typescript": "^5.0.0"
+  }
+}

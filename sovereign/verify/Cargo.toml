@@ -1,0 +1,29 @@
+[package]
+name = "verify"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "verify"
+path = "src/main.rs"
+
+[dependencies]
+aws-nitro-enclaves-cose.workspace = true
+clap.workspace = true
+http-body-util.workspace = true
+hyper-util.workspace = true
+hyper.workspace = true
+k256.workspace = true
+pem.workspace = true
+reqwest.workspace = true
+rustls-pki-types.workspace = true
+rustls.workspace = true
+serde_bytes.workspace = true
+serde_cbor.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+sha2.workspace = true
+tokio.workspace = true
+tracing-subscriber.workspace = true
+tracing.workspace = true
+webpki.workspace = true

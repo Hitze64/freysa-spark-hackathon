@@ -1,0 +1,58 @@
+# Environment and Config Files
+.env
+.env.test
+.test-assets
+./examples/assets/*
+
+# config.json
+enclave-info.json
+app.config.timestamp_*
+
+# System Files
+.DS_Store
+*.log
+.vscode/
+
+# Binary files (including proto build artifact)
+*.bin
+
+# Build and Cache
+dist/
+.turbo/
+.vercel/
+.vinxi/
+.output/
+.eslintcache
+*.tsbuildinfo
+coverage/
+__generated__/
+target/
+bin/
+**/*.rs.bk
+
+# Database
+db.sqlite
+
+# Dependencies
+node_modules/
+# package-lock.json
+yarn.lock
+.yalc
+yalc.lock
+
+# Package-specific
+# Ignore all folders except `src/` in every published package
+packages/*/*/
+!packages/*/src/
+# and all folders inside `tests` package, which is handled separately
+!packages/tests/*/
+packages/tests/node_modules
+
+# Example-specific
+examples/next-big-router/src/server/routers
+
+# Enclave-specific
+enclave.eif
+enclave/src/descriptor.bin
+agent/examples/assets/
+agent/dist

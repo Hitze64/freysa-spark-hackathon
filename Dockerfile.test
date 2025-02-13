@@ -1,0 +1,6 @@
+# Dockerfile.test
+FROM alpine:latest
+RUN apk update && apk add --no-cache socat bash
+COPY test_start.sh /test_start.sh
+RUN chmod +x /test_start.sh
+CMD ["/test_start.sh"]

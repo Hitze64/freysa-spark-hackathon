@@ -1,0 +1,22 @@
+# .dockerignore
+# node_modules/
+# dist/
+
+FROM node:20 AS builder
+
+WORKDIR /build
+
+RUN apt-get update && npm install -g pnpm
+
+COPY . /build/
+
+WORKDIR /build
+RUN pnpm install
+RUN pnpm build
+
+FROM scratch
+
+WORKDIR /prebuild
+
+COPY --from=builder /build/dist/         /prebuild/dist/
+COPY --from=builder /build/node_modules/ /prebuild/node_modules/

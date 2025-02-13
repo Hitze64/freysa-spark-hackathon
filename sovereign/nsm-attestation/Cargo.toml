@@ -1,0 +1,27 @@
+[package]
+name = "nsm-attestation"
+version.workspace = true
+edition.workspace = true
+
+[features]
+test-utils = []
+
+[dependencies]
+anyhow.workspace = true
+aws-nitro-enclaves-cose.workspace = true
+http-body-util.workspace = true
+hyper-util.workspace = true
+hyper.workspace = true
+k256.workspace = true
+lazy_static.workspace = true
+openssl.workspace = true
+pem.workspace = true
+serde_bytes.workspace = true
+serde_cbor.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+sha2.workspace = true
+tokio.workspace = true
+tracing-subscriber.workspace = true
+tracing.workspace = true
+webpki.workspace = true

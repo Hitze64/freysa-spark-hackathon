@@ -1,0 +1,106 @@
+<svg viewBox="0 0 860 650" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <path d="M 0 0, L 6 3, L 0 6, L 1.5 3 Z" fill="dimgray"/>
+        </marker>
+        <marker id="arrowhead-start" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto">
+            <path d="M 6 0, L 0 3, L 6 6, L 4.5 3 Z" fill="dimgray"/>
+        </marker>
+    </defs>
+    <style>
+        .container { fill: none; stroke: dimgray; stroke-width: 1.5; stroke-dasharray: 5,5; rx: 4; }
+        .text { fill: black; font-family: sans-serif; text-anchor: start; }
+        .title { fill: dimgray; font-family: sans-serif; font-size: 16px; text-anchor: start; }
+        .annotation { fill: blue; font-family: sans-serif; font-size: 16px; text-anchor: middle; font-weight: bold;}
+        .tee { fill: lightgreen; stroke: green; stroke-width: 2; rx: 4; }
+        .old-tee { fill: palevioletred; stroke: green; stroke-width: 2; rx: 4; }
+        .new-tee { fill: gold; stroke: goldenrod; stroke-width: 2; rx: 4; }
+        .arrow { fill: none; stroke: dimgray; stroke-width: 2; }
+    </style>
+    <rect class="container" x="0" y="0" width="850" height="410"/>
+    <text class="title" x="10" y="20">TEE Pool</text>
+    <rect class="container" x="60" y="50" width="350" height="120"/>
+    <text class="title" x="70" y="70">Group A</text>
+    <rect class="tee" x="100" y="90" width="80" height="50"/>
+    <text class="text" x="110" y="110">A.17</text>
+    <text class="text" x="110" y="130">i-86d1</text>
+    <rect class="tee" x="200" y="90" width="80" height="50"/>
+    <text class="text" x="210" y="110">A.17</text>
+    <text class="text" x="210" y="130">i-3f2c</text>
+    <rect class="tee" x="300" y="90" width="80" height="50"/>
+    <text class="text" x="310" y="110">A.17</text>
+    <text class="text" x="310" y="130">i-b7a4</text>
+    <rect class="container" x="460" y="50" width="350" height="120"/>
+    <text class="title" x="470" y="70">Group B</text>
+    <rect class="tee" x="500" y="90" width="80" height="50"/>
+    <text class="text" x="510" y="110">B.7</text>
+    <text class="text" x="510" y="130">i-d9e0</text>
+    <rect class="tee" x="600" y="90" width="80" height="50"/>
+    <text class="text" x="610" y="110">B.7</text>
+    <text class="text" x="610" y="130">i-42f8</text>
+    <rect class="old-tee" x="700" y="90" width="80" height="50"/>
+    <text class="text" x="710" y="110">B.6</text>
+    <text class="text" x="710" y="130">i-91c5</text>
+
+    <rect class="container" x="60" y="250" width="250" height="120"/>
+    <text class="title" x="70" y="270">Group C</text>
+    <rect class="tee" x="100" y="290" width="80" height="50"/>
+    <text class="text" x="110" y="310">C.2</text>
+    <text class="text" x="110" y="330">i-e6d3</text>
+    <rect class="tee" x="200" y="290" width="80" height="50"/>
+    <text class="text" x="210" y="310">C.2</text>
+    <text class="text" x="210" y="330">i-5b8f</text>
+    
+    <rect class="container" x="360" y="250" width="450" height="120"/>
+    <text class="title" x="370" y="270">Group D</text>
+    
+    <rect class="tee" x="400" y="290" width="80" height="50"/>
+    <text class="text" x="410" y="310">D.9</text>
+    <text class="text" x="410" y="330">i-a704</text>
+    <rect class="tee" x="500" y="290" width="80" height="50"/>
+    <text class="text" x="510" y="310">D.9</text>
+    <text class="text" x="510" y="330">i-c2d1</text>
+    <text class="annotation" x="540" y="275">Leader</text>
+
+    <text class="annotation" x="640" y="305" font-size="14">key sync</text>
+    <path class="arrow" d="M 580,315 L 700,315" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)"/>
+
+    <rect class="new-tee" x="700" y="290" width="80" height="50"/>
+    <text class="annotation" x="740" y="275">Follower</text>
+    <text class="text" x="710" y="310">D.10</text>
+    <text class="text" x="710" y="330">i-89eb</text>
+
+    <rect class="tee" x="10" y="450" width="80" height="50"/>
+    <text class="text" x="20" y="470">version</text>
+    <text class="text" x="20" y="490">instance</text>
+    <text class="text" x="100" y="480">Up-to-date instance</text>
+    <rect class="old-tee" x="10" y="520" width="80" height="50"/>
+    <text class="text" x="20" y="540">version</text>
+    <text class="text" x="20" y="560">instance</text>
+    <text class="text" x="100" y="550">Outdated instance</text>
+    <rect class="new-tee" x="10" y="590" width="80" height="50"/>
+    <text class="text" x="20" y="610">version</text>
+    <text class="text" x="20" y="630">instance</text>
+    <text class="text" x="100" y="620">Starting instance</text>
+
+    <rect class="container" x="300" y="450" width="550" height="190"/>
+    <text class="title" x="310" y="470">Governance Committee</text>
+    <text class="text" x="320" y="500">A.17</text>
+    <text class="text" x="370" y="500">A.18</text>
+    <text class="text" x="420" y="500">B.7</text>
+    <text class="text" x="470" y="500">C.2</text>
+    <text class="text" x="520" y="500">D.9</text>
+    <text class="text" x="570" y="500">D.10</text>
+
+    <text class="text" x="320" y="550">i-86d1</text>
+    <text class="text" x="370" y="550">i-3f2c</text>
+    <text class="text" x="420" y="550">i-b7a4</text>
+    <text class="text" x="470" y="550">i-d9e0</text>
+    <text class="text" x="520" y="550">i-42f8</text>
+    <text class="text" x="570" y="550">i-91c5</text>
+    <text class="text" x="320" y="600">i-e6d3</text>
+    <text class="text" x="370" y="600">i-5b8f</text>
+    <text class="text" x="420" y="600">i-c2d1</text>
+    <text class="text" x="470" y="600">i-91c5</text>
+    <text class="text" x="520" y="600">i-89eb</text>
+</svg>

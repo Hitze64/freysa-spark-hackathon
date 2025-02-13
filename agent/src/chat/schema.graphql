@@ -1,0 +1,52 @@
+directive @isAuthorized on FIELD_DEFINITION
+
+scalar DateTime
+
+type Query {
+  getChats(first: Int! = 10, offset: Int! = 0): [Chat!]! @isAuthorized
+  getChat(id: ID!): Chat! @isAuthorized
+}
+
+type Mutation {
+  createChat(name: String!): Chat! @isAuthorized
+  sendMessage(chatId: ID!, text: String!): Message! @isAuthorized
+  updateTitle(chatId: ID!, title: String!): Chat! @isAuthorized
+  deleteChat(chatId: ID!): Chat! @isAuthorized
+}
+
+type Subscription {
+  messageAdded(chatId: ID!): Message! @isAuthorized
+}
+
+type ToolCall {
+  id: String!
+  name: String!
+  isCompleted: Boolean!
+}
+
+type ToolArg {
+  name: String!
+  arguments: String!
+}
+
+type Chat {
+  id: ID!
+  name: String!
+  messages: [Message!]!
+  createdAt: DateTime!
+}
+
+type Message {
+  id: ID!
+  text: String
+  imageUrls: [String!]!
+  role: Role!
+  toolCalls: [ToolCall!]!
+  toolArgs: [ToolArg!]
+  createdAt: DateTime!
+}
+
+enum Role {
+  USER
+  ASSISTANT
+}

@@ -1,0 +1,71 @@
+name: Create and publish Docker images
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: main
+  release:
+    types: [published, prereleased]
+
+env:
+  REGISTRY: ghcr.io
+  AGENT_IMAGE: ${{ github.repository }}-agent
+  SOVEREIGN_IMAGE: ${{ github.repository }}-sovereign
+
+jobs:
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Agent image
+      - name: Extract metadata for Agent Docker image
+        id: meta-agent
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.AGENT_IMAGE }}
+          tags: |
+            type=ref,event=pr
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and push Agent Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: ./agent
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta-agent.outputs.tags }}
+          labels: ${{ steps.meta-agent.outputs.labels }}
+
+      # Sovereign image
+      - name: Extract metadata for Sovereign Docker image
+        id: meta-sovereign
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.SOVEREIGN_IMAGE }}
+          tags: |
+            type=ref,event=pr
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and push Sovereign Docker image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          context: .
+          file: ./Dockerfile.sovereign
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.meta-sovereign.outputs.tags }}
+          labels: ${{ steps.meta-sovereign.outputs.labels }}

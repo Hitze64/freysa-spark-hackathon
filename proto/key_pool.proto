@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package key_pool;
+
+/// Full details of an ECDSA signature, including recovery information.
+message EcdsaSignature {
+  /// The 'r' component of this signature;
+  /// the 'x' coordinate in the ECDSA signing process.
+  /// Always exactly 32 bytes (big-endian).
+  bytes r = 1;
+  /// The 's' component of this signature. Always exactly 32 bytes (big-endian).
+  bytes s = 2;
+  /// One additional bit of information is needed to recover the public key from a
+  /// signature in Ethereum, viz., information about whether the affine y coordinate
+  /// of the group element is odd.
+  ///
+  /// The 'v' component of an Ethereum transaction is either
+  /// `chain_id * 2 + 35 + is_y_odd` or `27 + is_y_odd`
+  /// depending on whether six or nine components are RLP encoded and hashed.
+  ///
+  /// See https://eips.ethereum.org/EIPS/eip-155 for details.
+  bool is_y_odd = 3;
+
+  /// Additional information for public key recovery. Not used by Ethereum.
+  bool is_x_reduced = 4;
+}
+
+/// Key selection for signing methods.
+message SigningKey {
+  /// The semantics of some values are specified in `BuiltinSigningKey` -
+  /// in particular, zero has the special meaning of unspecified/default.
+  ///
+  /// Values outside the range defined in this enum are application specific.
+  ///
+  /// The maximum allowed value depends on the configuration. Note that
+  /// if the server is configured to support N secret keys, these are
+  /// accessed using key_index 1..N.
+  uint32 key_index = 1;
+}
+
+/// Keys with predefined semantics.
+enum BuiltinSigningKey {
+  // Use default for method.
+  BUILTIN_SIGNING_KEY_UNSPECIFIED = 0;
+  // Use key dedicated to Ethereum signing.
+  BUILTIN_SIGNING_KEY_ETHEREUM = 1;
+  // Use key dedicated to signing service responses (e.g., LLM responses).
+  BUILTIN_SIGNING_KEY_SERVICE_RESPONSE = 2;
+}
+
+/// Sign a 32 byte message digest.
+message SignDigestRequest {
+  /// Default key: `SIGNING_KEY_SERVICE_RESPONSE` (used if left as `SIGNING_KEY_UNSPECIFIED`).
+  SigningKey signing_key = 1;
+
+  /// The actual digest bytes to sign. Must be exactly 32 bytes.
+  ///
+  /// When signing an Ethereum transaction or message,
+  /// this should be the hash of the transaction or message, as per the Ethereum
+  /// specification.
+  bytes digest = 2;
+}
+
+message SignDigestResponse {
+  EcdsaSignature signature = 1;
+}
+
+/// Hash function to use for ECDSA message signing.
+enum HashFunction {
+  // Reserve 0 to detect unset values.
+  HASH_FUNCTION_UNSPECIFIED = 0;
+
+  // Commonly used (e.g. Bitcoin).
+  HASH_FUNCTION_SHA256 = 1;
+
+  // Used by Ethereum (original Keccak, not SHA3).
+  HASH_FUNCTION_KECCAK256 = 2;
+
+  // NIST standardized versions of Keccak.
+  HASH_FUNCTION_SHA3_256 = 5;
+}
+
+/// Compute a signature on a message.
+message SignMessageRequest {
+  /// Default key: `SIGNING_KEY_SERVICE_RESPONSE` (used if left as `SIGNING_KEY_UNSPECIFIED`).
+  SigningKey signing_key = 1;
+
+  /// Hash function to use to compute the digest to sign.
+  HashFunction hash_function = 2;
+
+  /// The bytes of the message to sign. Maximum message size is 1Mib (2**20).
+  bytes message = 3;
+}
+
+message SignMessageResponse {
+  /// An signatuer using Ethereum's 65 byte format `r || s || v`, where `r` and `s`
+  /// the signature components (each 32 bytes) and `v` is a zero or one byte
+  /// used for key recovery.
+  bytes signature = 1;
+}
+
+message SignEthereumTransactionRequest {
+  /// Default key: `SIGNING_KEY_ETHEREUM` (used if left as `SIGNING_KEY_UNSPECIFIED`).
+  SigningKey signing_key = 1;
+  /// RLP-encoded unsigned transaction.
+  /// Must contain 6 or 9 element. If 9 elements are used, the 7th element
+  /// it is assumed to be the chain ID and the transaction is signed using EIP-155;
+  /// otherwise a legacy signature is used.
+  bytes tx_data = 2;
+}
+
+message SignEthereumTransactionResponse {
+  /// RLP-encoded signed transaction.
+  /// Always 9 elements: the six elements from the input, followed by v, r, s.
+  bytes tx_data = 1;
+}
+
+message GetEthereumAddressRequest {
+  /// Default key: `SIGNING_KEY_ETHEREUM` (used if left as `SIGNING_KEY_UNSPECIFIED`).
+  SigningKey signing_key = 1;
+}
+
+// TODO: should use 0x prefix? should support ERC-55?
+message GetEthereumAddressResponse {
+  /// Hex encoded 40 bytes.
+  string ethereum_address = 1;
+}
+
+/// RPCs provided by the key pool.
+service KeyPoolService {
+  rpc SignDigest(SignDigestRequest) returns (SignDigestResponse);
+  rpc SignMessage(SignMessageRequest) returns (SignMessageResponse);
+  rpc SignEthereumTransaction(SignEthereumTransactionRequest) returns (SignEthereumTransactionResponse);
+  rpc GetEthereumAddress(GetEthereumAddressRequest) returns (GetEthereumAddressResponse);
+}

@@ -1,0 +1,70 @@
+[package]
+name = "enclave"
+version.workspace = true
+edition.workspace = true
+build = "build.rs"
+
+[[bin]]
+name = "enclave"
+path = "src/main.rs"
+
+[features]
+test-utils = []
+nsm = []
+default = ["nsm"]
+
+[dependencies]
+nsm-attestation = { path = "../nsm-attestation" }
+anyhow.workspace = true
+base64.workspace = true
+bytes.workspace = true
+byteorder.workspace = true
+clap.workspace = true
+ecies.workspace = true
+elliptic-curve.workspace = true
+futures.workspace = true
+hex.workspace = true
+http-body-util.workspace = true
+hyper-rustls.workspace = true
+hyper-util.workspace = true
+hyper.workspace = true
+k256.workspace = true
+lazy_static.workspace = true
+nix.workspace = true
+nsm-driver.workspace = true
+nsm-io.workspace = true
+p256.workspace = true
+pin-project = "1.1.5"
+pki-types.workspace = true
+prost.workspace = true
+prometheus.workspace = true
+rcgen.workspace = true
+rlp.workspace = true
+rustls.workspace = true
+secp256k1.workspace = true
+serde_bytes.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+sha2.workspace = true
+sha3.workspace = true
+tiny-keccak.workspace = true
+tonic.workspace = true
+tonic-reflection.workspace = true
+tokio.workspace = true
+tokio-rustls.workspace = true
+tokio-scoped.workspace = true
+tokio-vsock.workspace = true
+tokio-stream.workspace = true
+tower.workspace = true
+tracing-subscriber.workspace = true
+tracing.workspace = true
+webpki-roots.workspace = true
+reqwest = { workspace = true, features = ["json"] }
+
+
+[dev-dependencies]
+nsm-attestation = { path = "../nsm-attestation", features = ["test-utils"] }
+ethereum-tx-sign = "6.1.3"
+
+[build-dependencies]
+tonic-build = "0.12.3"

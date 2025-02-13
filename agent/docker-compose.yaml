@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  neo4j-v3:
+    image: neo4j:5.26
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      # Basic Neo4j settings
+      - NEO4J_AUTH=neo4j/root1234
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4JLABS_PLUGINS=["apoc", "graph-data-science"]
+      - NEO4J_dbms.security.procedures.unrestricted=apoc.*,gds.*
+      - NEO4J_dbms.security.procedures.allowlist=apoc.*,gds.*
+
+      # OpenAI Integration Settings
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - NEO4J_dbms.security.procedures.unrestricted=apoc.*,gds.*,ai.*
+      - NEO4J_server.extension_classpath=/plugins/*
+    volumes:
+      - ./neo4j_data:/data
+      - ./neo4j_conf:/conf
+      - ./plugins:/plugins
+      - ./import:/import

@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "composite": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["../src/*"],
+      "sovereign-agent": ["../src"],
+      "sovereign-agent/*": ["../src/*"]
+    },
+    "rootDir": "../"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "**/*.test.ts"],
+  "references": [
+    {
+      "path": "../"
+    }
+  ]
+}

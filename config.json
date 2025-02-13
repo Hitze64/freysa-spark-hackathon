@@ -1,0 +1,35 @@
+{
+  "debug-mode" : false,
+  "logging" : {
+    "sovereign" : {
+      "stdout" : 54321
+    },
+    "agent" : {
+      "stdout" : 54320
+    }
+  },
+  "sovereign" : {
+    "secret-keys-from": {
+      "generate" : 1000
+    },
+    "governance": {
+      "safe": {
+        "wallet-address": "0x...",
+        "threshold": 1,
+        "http-endpoint": "",
+        "http-endpoint-port": 50000,
+        "chain-id": 1
+      }
+    },
+    "key-sync-port" : 50001,
+    "monitoring-port" : 50051,
+    "http-attestation-port" : 58080,
+    "https-attestation-port": 58443,
+    "alt-names" : [],
+    "trace-level" : 1
+  },
+  "agent" : {
+    "FOO" : "foo",
+    "BAR" : "bar"
+  }
+}

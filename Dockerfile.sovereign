@@ -1,0 +1,46 @@
+# Stage 1: Build stage
+FROM --platform=linux/amd64 amazonlinux:2023 AS builder
+
+WORKDIR /app
+COPY proto     ./proto
+COPY sovereign ./sovereign
+COPY Makefile  ./Makefile
+
+# Install base development tools and clean cache
+RUN dnf group install -y "Development Tools" && \
+    dnf clean metadata && dnf makecache
+
+# Install other dependencies
+RUN dnf install -y openssl-devel pkgconfig && \
+    dnf install -y protobuf protobuf-compiler protobuf-devel && \
+    dnf install -y perl perl-FindBin perl-IPC-Cmd perl-Pod-Simple && \
+    dnf install -y glibc-static libstdc++-static
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    . $HOME/.cargo/env
+
+RUN git clone git://git.musl-libc.org/musl \
+    && cd musl \
+    && ./configure --prefix=/usr/local \
+    && make \
+    && make install \
+    && cd .. \
+    && rm -rf musl
+
+# Add cargo to PATH
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Build the enclave binary
+WORKDIR /app
+RUN make build
+
+# Stage 2: Save stage
+FROM alpine:latest@sha256:21dc6063fd678b478f57c0e13f47560d0ea4eeba26dfc947b2a4f81f686b9f45
+
+WORKDIR /prebuild
+
+COPY --from=builder /app/sovereign/bin/enclave  /prebuild/enclave
+
+ARG TIMESTAMP=202501010000.00
+RUN touch -h -t ${TIMESTAMP} /prebuild/enclave && chmod 644 /prebuild/enclave
