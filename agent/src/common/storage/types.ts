@@ -9,6 +9,7 @@ export interface FileStorageConfig {
     accessKeyId: string
     secretAccessKey: string
     prefix?: string
+    baseUrlOverride?: string
   }
 }
 

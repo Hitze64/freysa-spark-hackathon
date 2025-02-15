@@ -102,6 +102,8 @@ async function exampleGrpcPKSigner() {
   const grpcPKSignerConfig: GrpcPKSignerConfig = {
     type: TransactionMode.GRPC_PK,
     rpcUrl: process.env.RPC_URL!,
+    grpcEthClientUrl: process.env.TEE_ADDRESS!,
+    bearerToken: process.env.TEE_GRPC_BEARER_TOKEN!,
   }
 
   const safSigner = new SAFSigner(grpcPKSignerConfig)

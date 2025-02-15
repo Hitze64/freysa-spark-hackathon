@@ -56,5 +56,3 @@ source $HOME/.cargo/env
 git clone git://git.musl-libc.org/musl 
 cd musl && ./configure --prefix=/usr/local && make && sudo make install && cd ..
 rm -rf musl
-
-sudo modprobe vhost_vsock

@@ -11,6 +11,7 @@ export class S3Storage implements FileStorage {
       accessKeyId: string
       secretAccessKey: string
       prefix?: string
+      baseUrlOverride?: string
     }
   ) {
     this.client = new S3Client({
@@ -46,6 +47,9 @@ export class S3Storage implements FileStorage {
     )
 
     console.log("uploaded to s3", key)
+    if (this.config.baseUrlOverride) {
+      return `${this.config.baseUrlOverride}/${key}`
+    }
     return `https://${this.config.bucket}.s3.${this.config.region}.amazonaws.com/${key}`
   }
 

@@ -1,8 +1,6 @@
 import { OpenAI } from "openai"
-import {
-  ChatCompletion,
-  ChatCompletionCreateParamsBase,
-} from "openai/resources/chat/completions"
+import { ChatCompletion } from "openai/resources/chat/completions"
+import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions/completions"
 
 export type CompletionsParams = ChatCompletionCreateParamsBase
 export type CompletionsResponse = ChatCompletion & {

@@ -50,6 +50,7 @@ export class OAICompatibleModel implements TModel {
       messages: body.messages,
       tools: body.tools,
       tool_choice: body.toolChoice,
+      temperature: body.temperature,
     })
   }
 
@@ -64,6 +65,7 @@ export class OAICompatibleModel implements TModel {
       messages: body.messages,
       tools: body.tools,
       tool_choice: body.toolChoice,
+      temperature: body.temperature,
     })
     const choice = completion.choices[0]
     return choice.message.tool_calls ?? []

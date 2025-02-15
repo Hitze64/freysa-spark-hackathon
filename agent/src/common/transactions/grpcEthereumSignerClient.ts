@@ -6,16 +6,21 @@ import {
   HashFunction,
   KeyPoolServiceClient,
 } from "../generated/proto/key_pool"
-import { credentials } from "@grpc/grpc-js"
+import { credentials, Metadata } from "@grpc/grpc-js"
 
 export class GrpcEthereumSignerClient {
   private client: KeyPoolServiceClient
+  private bearerToken?: string
 
-  constructor(grpcServerUrl: string = "unix:///tmp/enclave.sock") {
+  constructor(
+    grpcServerUrl: string = "unix:///tmp/enclave.sock",
+    bearerToken?: string
+  ) {
     this.client = new KeyPoolServiceClient(
       grpcServerUrl,
       credentials.createInsecure()
     )
+    this.bearerToken = bearerToken
   }
 
   async signMessage(message: string, signingKey: SigningKey): Promise<string> {
@@ -24,8 +29,12 @@ export class GrpcEthereumSignerClient {
       hashFunction: HashFunction.HASH_FUNCTION_KECCAK256,
       message: Buffer.from(message),
     }
+    const metadata = new Metadata()
+    if (this.bearerToken)
+      metadata.add("authorization", `Bearer ${this.bearerToken}`)
+
     return new Promise<string>((resolve, reject) => {
-      this.client.signMessage(request, (error, response) => {
+      this.client.signMessage(request, metadata, (error, response) => {
         if (error) {
           return reject(error)
         }
@@ -48,17 +57,24 @@ export class GrpcEthereumSignerClient {
       signingKey: signingKey,
       txData: Buffer.from(txData),
     }
+    const metadata = new Metadata()
+    if (this.bearerToken)
+      metadata.add("authorization", `Bearer ${this.bearerToken}`)
     return new Promise<Uint8Array>((resolve, reject) => {
-      this.client.signEthereumTransaction(request, (error, response) => {
-        if (error) {
-          return reject(error)
+      this.client.signEthereumTransaction(
+        request,
+        metadata,
+        (error, response) => {
+          if (error) {
+            return reject(error)
+          }
+          if (response.txData) {
+            resolve(response.txData)
+          } else {
+            reject(new Error("Unknown error"))
+          }
         }
-        if (response.txData) {
-          resolve(response.txData)
-        } else {
-          reject(new Error("Unknown error"))
-        }
-      })
+      )
     })
   }
 
@@ -66,8 +82,12 @@ export class GrpcEthereumSignerClient {
     const request: GetEthereumAddressRequest = {
       signingKey: signingKey,
     }
+    const metadata = new Metadata()
+    if (this.bearerToken)
+      metadata.add("Authorization", `Bearer ${this.bearerToken}`)
+
     return new Promise<string>((resolve, reject) => {
-      this.client.getEthereumAddress(request, (error, response) => {
+      this.client.getEthereumAddress(request, metadata, (error, response) => {
         if (error) {
           return reject(error)
         }

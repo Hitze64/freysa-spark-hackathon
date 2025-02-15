@@ -29,7 +29,7 @@ type ReplicateResponse = {
   version: string
   input: ReplicateInput
   logs: string
-  output: string[]
+  output: string
   data_removed: boolean
   error: string | null
   status: "starting" | "processing" | "succeeded" | "failed" | "canceled"
@@ -50,36 +50,40 @@ export const replicateAPICall = async ({
   if (!token) {
     throw new Error("REPLICATE_API_TOKEN is not set")
   }
-  const response = await fetch("https://api.replicate.com/v1/predictions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-      Prefer: "wait",
-    },
-    body: JSON.stringify({
-      version:
-        "728c47d1aaa9bca3fa37888ef1fc36bc4ab7306579dd2321afcb99e530a17a33",
-      input: {
-        prompt: prompt,
-        model: "dev",
-        go_fast: false,
-        lora_scale: 0.82,
-        megapixels: "1",
-        num_outputs: numOutputs,
-        aspect_ratio: "1:1",
-        output_format: "webp",
-        guidance_scale: 2.5,
-        output_quality: 80,
-        prompt_strength: 0.8,
-        extra_lora_scale: 1,
-        num_inference_steps: 28,
+
+  const response = await fetch(
+    `https://api.replicate.com/v1/models/${model}/predictions`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Prefer: "wait",
       },
-    }),
-  })
+      body: JSON.stringify({
+        input: {
+          prompt: prompt,
+          go_fast: false,
+          lora_scale: 0.82,
+          megapixels: "1",
+          num_outputs: numOutputs,
+          aspect_ratio: "1:1",
+          output_format: "webp",
+          guidance_scale: 2.5,
+          output_quality: 80,
+          prompt_strength: 0.8,
+          extra_lora_scale: 1,
+          num_inference_steps: 28,
+        },
+      }),
+    }
+  )
 
   const data = (await response.json()) as ReplicateResponse
-  return data.output ?? null
+  if (data.output) {
+    return [data.output]
+  }
+  return []
 }
 
 export const replicateRunAndSave = async ({
@@ -94,7 +98,6 @@ export const replicateRunAndSave = async ({
   numOutputs: number
 }) => {
   const imageUrls = await replicateAPICall({ prompt, model, numOutputs })
-  console.log("imageUrls", imageUrls)
 
   const storedUrls = await Promise.all(
     imageUrls.map((url) => storage.upload(url))

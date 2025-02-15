@@ -20,6 +20,7 @@ export type TModelCall = {
   messages: Array<TChatMessage>
   tools?: Array<ToolSchema>
   toolChoice?: "required" | "auto"
+  temperature?: number
 }
 
 export type TEmbedCall = {
