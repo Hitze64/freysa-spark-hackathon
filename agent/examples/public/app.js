@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusIndicator = document.getElementById('statusIndicator');
     const approvalValue = document.getElementById('approvalValue');
     const approvalBanner = document.getElementById('approvalBanner');
+    const paymentInfo = document.getElementById('paymentInfo');
     
     // API endpoint
     const API_URL = '/agent/execute';
@@ -74,6 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateApprovalState(state) {
         if (state && state.approved) {
             approvalValue.textContent = 'APPROVED';
+            paymentInfo.textContent = JSON.stringify(state.payInvoice, null, 2);
             approvalValue.classList.add('approved');
             approvalBanner.classList.add('visible');
             
