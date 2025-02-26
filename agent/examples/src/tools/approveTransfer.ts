@@ -1,5 +1,6 @@
 import { SAFSigner } from "@/common"
 import { InferSchemaType, Tool, ToolSchema } from "@/common/tools/types"
+import { sendPayment } from "src/lightspark"
 
 const approveTransferSchema = {
   type: "function",
@@ -41,9 +42,10 @@ export class ApproveTransferTool implements Tool<ApproveTransferInput> {
   }
 
   execute = async (input: ApproveTransferInput) => {
-    
-
-    return `Approved money transfer with explanation: ${input.explanation}`
+    const reason = `Approved money transfer with explanation: ${input.explanation}`
+    await sendPayment(reason);
+    return reason
   }
 }
+
 

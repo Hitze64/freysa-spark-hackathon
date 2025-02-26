@@ -30,25 +30,12 @@ async function fundNode() {
   console.log(`Funded amount: ${fundNodeOutput.originalValue}`)
 }
 
-async function sendPayment() {
-//   const account = await client.getCurrentAccount()
-//   if (account) {
-//     let node = await account.getNodes(
-//       client,
-//       1,
-//       [BitcoinNetwork.REGTEST],
-//       [NODE_ID]
-//     )
-//     console.log(
-//       `Available balance: ${node.entities[0].balances?.availableToSendBalance.originalValue}`
-//     )
-//   }
-
+export async function sendPayment(reason: string = "example payment") {
   // Simulate receiving an invoice
   const testInvoice = await client.createTestModeInvoice(
     NODE_ID,
     20_000,
-    "example script payment"
+    reason
   )
   if (!testInvoice) {
     throw new Error("Unable to create test invoice")
@@ -72,4 +59,4 @@ async function main() {
   }
 }
 
-main()
+// main()

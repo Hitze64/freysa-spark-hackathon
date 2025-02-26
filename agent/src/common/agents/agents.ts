@@ -74,10 +74,13 @@ export class Agent implements Executor {
       const completion = await this.model.completions({
         messages: messages,
         tools: this.tools?.map((tool) => tool.schema),
+        toolChoice: "auto",
       })
 
       const choice = completion.choices[0]
 
+      logger.info(`Choice: ${JSON.stringify(choice)}`)
+      
       if (choice.message.tool_calls) {
         for (const toolCall of choice.message.tool_calls) {
           if (toolCall.function.name === CompletionTool.name) {
@@ -85,15 +88,17 @@ export class Agent implements Executor {
             logger.info("Execution completed")
           }
 
-          await this.preToolCallHook(toolCall.function.name)
+          // console.log("preToolCallHook", toolCall.function.name)
+          // await this.preToolCallHook(toolCall.function.name)
 
           const toolResult = await this.executeTool(
             toolCall.function.name,
             toolCall.function.arguments
           )
+          logger.info(`Execute tool ${toolCall.function.name} result: ${toolResult}`)
 
           // Call after tool execution
-          this.postToolCallHook(toolCall.function.name, toolResult)
+          // this.postToolCallHook(toolCall.function.name, toolResult)
 
           messages.push({
             role: "assistant",
