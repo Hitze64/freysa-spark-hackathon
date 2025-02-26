@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (response.ok) {
                 // Add agent response to chat
-                addMessage(data.result.response);
+                addMessage(data.result);
                 updateStatus('idle');
                 
                 // Check and update approval state
