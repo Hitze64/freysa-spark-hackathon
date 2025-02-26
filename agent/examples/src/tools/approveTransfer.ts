@@ -1,3 +1,6 @@
+import { SAFSigner } from "@/common"
+import { InferSchemaType, Tool, ToolSchema } from "@/common/tools/types"
+
 const approveTransferSchema = {
   type: "function",
   function: {
@@ -14,4 +17,33 @@ const approveTransferSchema = {
       required: ["explanation"],
     },
   },
+} as const satisfies ToolSchema
+
+type ApproveTransferInput = InferSchemaType<typeof approveTransferSchema>
+
+// const ApproveTransferTool: Tool<ApproveTransferInput> = {
+//   name: approveTransferSchema.function.name,
+//   schema: approveTransferSchema,
+//   execute: async (input: ApproveTransferInput) => {
+//     return `Approved money transfer with explanation: ${input.explanation}`
+//   },
+// }
+
+export class ApproveTransferTool implements Tool<ApproveTransferInput> {
+  name = approveTransferSchema.function.name
+  schema = approveTransferSchema
+
+  safSigner: SAFSigner
+  providerUrl: string
+  constructor(safSigner: SAFSigner, providerUrl?: string) {
+    this.safSigner = safSigner
+    this.providerUrl = providerUrl || process.env.RPC_URL!
+  }
+
+  execute = async (input: ApproveTransferInput) => {
+    
+
+    return `Approved money transfer with explanation: ${input.explanation}`
+  }
 }
+

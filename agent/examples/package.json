@@ -2,7 +2,7 @@
   "name": "sovereign-agent-examples",
   "private": true,
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/spark-server.ts",
     "dev:chat": "tsx watch src/chat-server.ts",
     "transfer": "tsx src/transfer.ts",
     "swap": "tsx src/swap.ts",
@@ -14,7 +14,8 @@
     "start-bundle": "./bin/sovereign-agent-server",
     "start:chat": "node dist/chat-server.js",
     "clean": "rm -rf dist bin",
-    "completion": "tsx src/completion.ts"
+    "completion": "tsx src/completion.ts",
+    "lightspark": "tsx src/lightspark.ts"
   },
   "bin": "dist/server.js",
   "nexe": {
@@ -36,6 +37,7 @@
   "dependencies": {
     "@fastify/cors": "^10.0.2",
     "@fastify/type-provider-typebox": "^5.1.0",
+    "@lightsparkdev/lightspark-sdk": "^1.8.10",
     "@sinclair/typebox": "^0.34.14",
     "fastify": "^5.2.1",
     "openai": "^4.28.0",

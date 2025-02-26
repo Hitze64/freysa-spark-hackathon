@@ -1,3 +1,5 @@
+import { InferSchemaType, Tool, ToolSchema } from "@/common/tools/types"
+
 const rejectTransferSchema = {
   type: "function",
   function: {
@@ -14,4 +16,16 @@ const rejectTransferSchema = {
       required: ["explanation"],
     },
   },
+} as const satisfies ToolSchema
+
+type RejectTransferInput = InferSchemaType<typeof rejectTransferSchema>
+
+const RejectTransferTool: Tool<RejectTransferInput> = {
+  name: rejectTransferSchema.function.name,
+  schema: rejectTransferSchema,
+  execute: async (input: RejectTransferInput) => {
+    return `Rejected money transfer with explanation: ${input.explanation}`
+  },
 }
+
+export { RejectTransferTool }

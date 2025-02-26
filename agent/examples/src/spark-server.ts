@@ -7,13 +7,13 @@ dotenv.config()
 import {
   Agent,
   OAICompatibleModel,
-  newOpenAICompletionsHandler,
   logger,
   SAFSigner,
-  UniswapTool,
   PrivateKeySignerConfig,
   TransactionMode,
 } from "sovereign-agent"
+import { ApproveTransferTool } from "./tools/approveTransfer"
+import { RejectTransferTool } from "./tools/rejectTransafer"
 async function startServer() {
   logger.info("Server starting...")
 
@@ -39,11 +39,11 @@ async function startServer() {
     rpcUrl: process.env.RPC_URL!,
   }
   const safSigner = new SAFSigner(privateKeySignerConfig)
-  const uniswapTool = new UniswapTool(safSigner)
+  const approveTool = new ApproveTransferTool(safSigner)
 
   const agent = new Agent({
     model: model,
-    tools: [uniswapTool],
+    tools: [approveTool, RejectTransferTool],
     systemPrompt: SYSTEM_PROMPT,
   })
 
@@ -63,10 +63,6 @@ async function startServer() {
       })
     }
   })
-
-  const openaiCompletionsHandler = newOpenAICompletionsHandler(safSigner)
-
-  fastify.post("/v1/api/openai/chat/completions", openaiCompletionsHandler)
 
   const port = process.env.PORT ? parseInt(process.env.PORT) : 3002
   const host = process.env.HOST || "0.0.0.0"
