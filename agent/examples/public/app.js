@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusIndicator = document.getElementById('statusIndicator');
     const approvalValue = document.getElementById('approvalValue');
     const approvalBanner = document.getElementById('approvalBanner');
-    const paymentInfo = document.getElementById('paymentInfo');
+    const paymentInfo = document.getElementById('payment-info');
     
     // API endpoint
     const API_URL = '/agent/execute';
