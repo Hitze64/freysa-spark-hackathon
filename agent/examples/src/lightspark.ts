@@ -48,6 +48,7 @@ export async function sendPayment(reason: string = "example payment") {
     throw new Error("Payment failed")
   }
   console.log(`Payment done with ID = ${JSON.stringify(payInvoice, null, 2)}\n`)
+  return payInvoice;
 }
 
 async function main() {

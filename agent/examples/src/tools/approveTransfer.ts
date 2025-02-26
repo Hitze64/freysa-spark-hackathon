@@ -43,8 +43,11 @@ export class ApproveTransferTool implements Tool<ApproveTransferInput> {
 
   execute = async (input: ApproveTransferInput) => {
     const reason = `Approved money transfer with explanation: ${input.explanation}`
-    await sendPayment(reason);
-    return reason
+    const payInvoice = await sendPayment(reason);
+    return JSON.stringify({
+      payInvoice,
+      reason
+    })
   }
 }
 

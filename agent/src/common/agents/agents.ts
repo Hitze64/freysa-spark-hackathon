@@ -96,17 +96,26 @@ export class Agent implements Executor {
           // console.log("preToolCallHook", toolCall.function.name)
           // await this.preToolCallHook(toolCall.function.name)
 
-          const toolResult = await this.executeTool(
+          let toolResult = await this.executeTool(
             toolCall.function.name,
             toolCall.function.arguments
           )
 
+          try {
+            const parsedToolResult = JSON.parse(toolResult)
+            if(parsedToolResult.payInvoice) {
+              this.state = {
+                ...this.state,
+                approved: true,
+                payInvoice: parsedToolResult.payInvoice,
+              }
+            }
+            if(parsedToolResult.reason) {
+              toolResult = parsedToolResult.reason
+            }
+          }catch (error) {}
+
           logger.info(`Execute tool ${toolCall.function.name} result: ${toolResult}`)
-
-
-          if (toolResult.includes("Approved money transfer")) {
-            this.state.approved = true
-          }
 
           // Call after tool execution
           // this.postToolCallHook(toolCall.function.name, toolResult)
