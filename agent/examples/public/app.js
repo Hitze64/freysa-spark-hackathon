@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (response.ok) {
                 // Add agent response to chat
-                addMessage(data);
+                addMessage(data.message);
                 updateStatus('idle');
             } else {
                 // Handle error
