@@ -5,7 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusIndicator = document.getElementById('statusIndicator');
     const approvalValue = document.getElementById('approvalValue');
     const approvalBanner = document.getElementById('approvalBanner');
-    const paymentInfo = document.getElementById('payment-info');
+    const viewPaymentBtn = document.getElementById('viewPaymentBtn');
+    const paymentModal = document.getElementById('paymentModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const closeModalX = document.querySelector('.close-modal');
+    const paymentDetails = document.getElementById('paymentDetails');
+    
+    // Store payment info
+    let paymentInfo = null;
     
     // API endpoint
     const API_URL = '/agent/execute';
@@ -75,13 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateApprovalState(state) {
         if (state && state.approved) {
             approvalValue.textContent = 'APPROVED';
-            paymentInfo.textContent = JSON.stringify(state.payInvoice, null, 2);
+            paymentInfo = state.payInvoice;
+            paymentDetails.textContent = JSON.stringify(paymentInfo, null, 2);
             approvalValue.classList.add('approved');
             approvalBanner.classList.add('visible');
             
             // Scroll to top to make sure banner is visible
             window.scrollTo(0, 0);
         }
+    }
+    
+    // Function to open modal
+    function openModal() {
+        paymentModal.style.display = 'block';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+    }
+    
+    // Function to close modal
+    function closeModal() {
+        paymentModal.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scrolling
     }
     
     // Function to send a message to the agent
@@ -144,6 +164,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             sendMessage();
+        }
+    });
+    
+    viewPaymentBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    closeModalX.addEventListener('click', closeModal);
+    
+    // Close modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === paymentModal) {
+            closeModal();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && paymentModal.style.display === 'block') {
+            closeModal();
         }
     });
     

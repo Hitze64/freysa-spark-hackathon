@@ -16,6 +16,7 @@
         <div class="approval-banner" id="approvalBanner">
             <div class="approval-icon">⚠️</div>
             <div class="approval-message">Transfer Approved!</div>
+            <button id="viewPaymentBtn" class="view-payment-btn">View Payment Details</button>
         </div>
         
         <div class="chat-container">
@@ -41,7 +42,22 @@
                 <span id="approvalValue">Not Approved</span>
             </div>
         </div>
-        <span id="payment-info"></span>
+    </div>
+    
+    <!-- Payment Info Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Payment Information</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <pre id="paymentDetails"></pre>
+            </div>
+            <div class="modal-footer">
+                <button id="closeModalBtn">Close</button>
+            </div>
+        </div>
     </div>
     
     <script src="app.js"></script>
