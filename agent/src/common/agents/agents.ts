@@ -53,6 +53,10 @@ export class Agent implements Executor {
     return this.state
   }
 
+  public resetState() {
+    this.state = {}
+  }
+
   private async preToolCallHook(toolName: string) {
     globalEventEmitter.emit(TOOL_EVENTS.TOOL_START, {
       toolName,

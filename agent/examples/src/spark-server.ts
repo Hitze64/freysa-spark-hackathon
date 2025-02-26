@@ -59,6 +59,7 @@ async function startServer() {
     const { task } = request.body as { task: string }
 
     try {
+      agent.resetState();
       const result = await agent.executeTask(task)
       logger.info("Agent Result:")
       logger.info(JSON.stringify(result))
