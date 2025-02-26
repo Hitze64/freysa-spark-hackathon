@@ -3,20 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freysa Agent Interface</title>
+    <title>Alice Agent Interface</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Freysa Agent Interface</h1>
-            <p class="subtitle">Interact with the Freysa AI Agent</p>
+            <h1>Alice Agent Interface</h1>
+            <p class="subtitle">Interact with the Alice AI Agent</p>
         </header>
+        
+        <div class="approval-banner" id="approvalBanner">
+            <div class="approval-icon">⚠️</div>
+            <div class="approval-message">Transfer Approved!</div>
+        </div>
         
         <div class="chat-container">
             <div class="chat-history" id="chatHistory">
                 <div class="welcome-message">
-                    <p>Welcome! I'm Freysa, your friendly AI assistant. How can I help you today?</p>
+                    <p>Welcome! I'm Alice, your friendly AI assistant. How can I help you today?</p>
                 </div>
             </div>
             
@@ -30,6 +35,10 @@
             <div id="statusIndicator" class="status-indicator idle">
                 <span class="status-dot"></span>
                 <span class="status-text">Idle</span>
+            </div>
+            <div id="approvalStatus" class="approval-status">
+                <span>Approval Status: </span>
+                <span id="approvalValue">Not Approved</span>
             </div>
         </div>
     </div>

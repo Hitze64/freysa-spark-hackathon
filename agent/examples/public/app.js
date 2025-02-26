@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('userInput');
     const sendButton = document.getElementById('sendButton');
     const statusIndicator = document.getElementById('statusIndicator');
+    const approvalValue = document.getElementById('approvalValue');
+    const approvalBanner = document.getElementById('approvalBanner');
     
     // API endpoint
     const API_URL = '/agent/execute';
@@ -68,6 +70,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return text;
     }
     
+    // Function to update approval state
+    function updateApprovalState(state) {
+        if (state && state.approved) {
+            approvalValue.textContent = 'APPROVED';
+            approvalValue.classList.add('approved');
+            approvalBanner.classList.add('visible');
+            
+            // Scroll to top to make sure banner is visible
+            window.scrollTo(0, 0);
+        }
+    }
+    
     // Function to send a message to the agent
     async function sendMessage() {
         const message = userInput.value.trim();
@@ -94,8 +108,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (response.ok) {
                 // Add agent response to chat
-                addMessage(data.message);
+                addMessage(data.result.response);
                 updateStatus('idle');
+                
+                // Check and update approval state
+                if (data.state) {
+                    updateApprovalState(data.state);
+                }
             } else {
                 // Handle error
                 addMessage(`Error: ${data.error || 'Something went wrong'}`, false);

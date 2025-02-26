@@ -22,7 +22,8 @@ export class Agent implements Executor {
   private systemPrompt: string
   private temperature?: number
   private maxSteps = 30
-  private defaultTools = [CompletionTool, PlanTool]
+  private defaultTools = [CompletionTool]
+  private state: Record<string, any> = {}
 
   constructor(config: TAgentConfig) {
     this.memory = config.memory
@@ -46,6 +47,10 @@ export class Agent implements Executor {
       messages.push({ role: "user", content: context.join("\n") })
     }
     return this.execute(messages)
+  }
+
+  public getState() {
+    return this.state
   }
 
   private async preToolCallHook(toolName: string) {
@@ -95,7 +100,13 @@ export class Agent implements Executor {
             toolCall.function.name,
             toolCall.function.arguments
           )
+
           logger.info(`Execute tool ${toolCall.function.name} result: ${toolResult}`)
+
+
+          if (toolResult.includes("Approved money transfer")) {
+            this.state.approved = true
+          }
 
           // Call after tool execution
           // this.postToolCallHook(toolCall.function.name, toolResult)
