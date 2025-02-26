@@ -1,6 +1,8 @@
 import Fastify from "fastify"
 import cors from "@fastify/cors"
 import * as dotenv from "dotenv"
+import fastifyStatic from "@fastify/static"
+import path from "path"
 
 dotenv.config()
 
@@ -23,6 +25,12 @@ async function startServer() {
 
   await fastify.register(cors, {
     origin: true,
+  })
+
+  // Serve static files from the public directory
+  await fastify.register(fastifyStatic, {
+    root: path.join(__dirname, '../public'),
+    prefix: '/',
   })
 
   fastify.get("/health", async () => {
