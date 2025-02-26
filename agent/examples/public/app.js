@@ -106,6 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const data = await response.json();
             
+
+            console.log("data", data)
+
             if (response.ok) {
                 // Add agent response to chat
                 addMessage(data.result);
